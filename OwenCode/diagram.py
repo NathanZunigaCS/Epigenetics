@@ -1,11 +1,13 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import os,sys
+    # Line that ensures legacy python code can run python3
+    # since old scientific papers used to run on Python 2. It is merely a safety measure.
+import os,sys # Allows communication to the os 
 import polychrom
 from polychrom import (simulation, starting_conformations,
                        forces, forcekits)
+# Uses polychrom as the wrapper around OpenMM for polymer simulations.
 
-# Hi Jordan!!!
-import simtk.openmm as openmm
+import simtk.openmm as openmm # Direct OpenMM access + units (polychrom historically uses simtk.*).
 import simtk.unit
 import os
 import polychrom.polymerutils as polymerutils
@@ -13,16 +15,15 @@ import numpy as np
 import random
 import math
 from scipy.spatial.distance import pdist, squareform
-from scipy.spatial import cKDTree
+from scipy.spatial import cKDTree # Numerics + random marks + neighbor search (KD-tree) + writing results.
 import csv
-import networkx as nx
-import EoN
+import networkx as nx; import EoN # Build a contact graph and run fast SIS dynamics on it.
 import copy
 
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap
+from matplotlib.colors import ListedColormap # Turn the CSV mark history into a color image diagram.
 
-def simple_marks_SSW(
+def simple_marks_SSW( # Defines the 3D Physics attraction force
     sim_object,
     marks,
     repulsionEnergy=30.0,  # base repulsion energy for **all** particles
@@ -34,7 +35,7 @@ def simple_marks_SSW(
 ):
     # based on selective_SSW
 
-    energy = (
+    energy = ( # building the expression
         "step(REPsigma - r) * Erep + step(r - REPsigma) * Eattr;"
         ""
         "Erep = rsc12 * (rsc2 - 1.0) * REPeTot / emin12 + REPeTot;" 
