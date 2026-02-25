@@ -207,7 +207,7 @@ def main():
     #tmax = 200
 
     relaxer = simulation.Simulation(
-            platform="CUDA",
+            platform="OpenCL",
             precision="single",
             integrator="variableLangevin",
             GPU = gpuid,
@@ -216,7 +216,7 @@ def main():
             N = size)
 
     sim = simulation.Simulation(
-            platform="CUDA",
+            platform="OpenCL",
             precision="single",
             integrator="brownian",
             GPU = gpuid,
