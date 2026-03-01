@@ -6,11 +6,12 @@ OwenCode -> Python code from or refactored from  J. A. Owen et al., Science 382,
 
 HistoneCode -> Julia code from Xiangting Li, Tom Chou; Stochastic nucleosome disassembly mediated by remodelers and histone fragmentation. J. Chem. Phys. 28 November 2023; 159 (20): 204107. https://doi.org/10.1063/5.0165136
 
-### Environment Setup
+### Windows Environment Setup
 Assumes Python, pip, and condo are already installed.
 
 # Create the environment:
 conda create -n epimem python=3.10 -y
+
 conda activate epimem
 
 # Install Libraries:
@@ -18,6 +19,7 @@ conda install -y openmm numpy scipy pandas matplotlib tqdm networkx
 
 # Install Git
 Confirm its installed:
+
 git --version
 
 # Install Polychrom and EoN using pip
