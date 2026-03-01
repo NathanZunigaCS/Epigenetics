@@ -206,8 +206,8 @@ def main():
     r = 1.5
     #tmax = 200
 
-    relaxer = simulation.Simulation(
-            platform="OpenCL",
+    relaxer = simulation.Simulation( # function that enables
+            platform="OpenCL", 
             precision="single",
             integrator="variableLangevin",
             GPU = gpuid,
