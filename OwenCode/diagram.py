@@ -35,8 +35,8 @@ def simple_marks_SSW( # Defines the 3D Physics attraction force
 ):
     # based on selective_SSW
 
-    energy = ( # building the expression
-        "step(REPsigma - r) * Erep + step(r - REPsigma) * Eattr;"
+    energy = ( # custom potential written in OpenMM’s expression language.
+        "step(REPsigma - r) * Erep + step(r - REPsigma) * Eattr;" # if r > REPsigma -> step(REPsigma - r)=1 : use repulsion Erep. if r < REPsigma
         ""
         "Erep = rsc12 * (rsc2 - 1.0) * REPeTot / emin12 + REPeTot;" 
         "REPeTot = REPe;"
@@ -199,7 +199,7 @@ def main():
     tmax = 200
 
     relaxer = simulation.Simulation(
-            platform="OpenCL",
+            platform="CUDA",
             precision="single",
             integrator="variableLangevin",
             GPU = gpuid,
@@ -208,7 +208,7 @@ def main():
             N = size)
 
     sim = simulation.Simulation(
-            platform="OpenCL",
+            platform="CPU",
             precision="single",
             integrator="brownian",
             GPU = gpuid,

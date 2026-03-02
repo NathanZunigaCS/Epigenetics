@@ -20,20 +20,21 @@ import copy
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
 
-def simple_marks_SSW(
-    sim_object,
-    marks,
+# The heart of the epigenetic spreading model
+def simple_marks_SSW( # helper function that builds an OpenMM nonbonded force
+    sim_object, # the Polychrom/OpenMM simulation object that provides sim_object.N (num of particles), .kT (thermal energy scale used to convert dimensionless energies into OpenMM units), and .conlen (a contact length scale used to convert Radii into sim distance units)
+    marks, # an array / list with 1 value per particle (+1.0 is B/marked/sticky, -1.0 is A/unmarked)
     repulsionEnergy=30.0,  # base repulsion energy for **all** particles
-    repulsionRadius=1.0,
-    attractionEnergy=0.0,  # base attraction energy for **all** particles
-    attractionRadius=1.5,
+    repulsionRadius=1.0, # distance threshold where repulsion applies, scaled by sim_object.conlen
+    attractionEnergy=0.0,  # base attraction energy for **all** particles. Often 0 so only sticky ones attract
+    attractionRadius=1.5, # attraction cutoff distance (scaled later).
     selectiveAttractionEnergy=0.3,  # **extra** attractive energy for **sticky** particles
-    name="simple_selective_SSW",
+    name="simple_selective_SSW", # name used to identify this force inside OpenMM
 ):
     # based on selective_SSW
 
-    energy = (
-        "step(REPsigma - r) * Erep + step(r - REPsigma) * Eattr;"
+    energy = (   
+        "step(REPsigma - r) * Erep + step(r - REPsigma) * Eattr;" # if r > REPsigma -> step(REPsigma - r)=1 : use repulsion Erep. if r < REPsigma
         ""
         "Erep = rsc12 * (rsc2 - 1.0) * REPeTot / emin12 + REPeTot;" 
         "REPeTot = REPe;"
