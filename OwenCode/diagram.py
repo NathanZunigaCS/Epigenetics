@@ -1,11 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
     # Line that ensures legacy python code can run python3
     # since old scientific papers used to run on Python 2. It is merely a safety measure.
-import os,sys # Allows communication to the os 
-import polychrom
+import os,sys # sys matters because the script reads command line arguments (argv)
+import polychrom # the polymer simulation wrapper used ontop of 
 from polychrom import (simulation, starting_conformations,
-                       forces, forcekits)
-# Uses polychrom as the wrapper around OpenMM for polymer simulations.
+                       forces, forcekits) # Specific pieces of for OpenMM to use
 
 import simtk.openmm as openmm # Direct OpenMM access + units (polychrom historically uses simtk.*).
 import simtk.unit
@@ -183,11 +182,11 @@ def count_marks(marks):
 
 def main():
 
-    gpuid = sys.argv[1]
+    gpuid = "cpu"
     #alpha10 = int(sys.argv[2])
-    ET = int(sys.argv[2])
-    rtime = int(sys.argv[3])
-    gens = int(sys.argv[4])
+    ET = int(sys.argv[1])
+    rtime = int(sys.argv[2])
+    gens = int(sys.argv[3])
 
     size = 10000
     desired_density = 0.05
@@ -198,11 +197,11 @@ def main():
     r = 1.5
     tmax = 200
 
-    relaxer = simulation.Simulation(
-            platform="CUDA",
+    relaxer = simulation.Simulation( 
+            platform="CPU",
             precision="single",
             integrator="variableLangevin",
-            GPU = gpuid,
+            #GPU = gpuid,
             collision_rate=0.01,
             error_tol=0.0005,
             N = size)
@@ -211,7 +210,7 @@ def main():
             platform="CPU",
             precision="single",
             integrator="brownian",
-            GPU = gpuid,
+            #GPU = gpuid,
             collision_rate=collrate,
             timestep = 5,
             N = size)
@@ -299,7 +298,7 @@ def main():
             writer.writerow(s100range)
             marks = copy.copy(marks0)
             polymer = starting_conformations.grow_cubic(size, 200)
-            sim.set_data(polymer, center=True)
+            sim.set_data(qer, center=True)
             sim.local_energy_minimization()
             relax_polymer(sim, relaxer, rtime)
             for i in range(gens):
@@ -331,10 +330,6 @@ def main():
             marks = copy.copy(marks0)
             send_marks_to_sim(sim, fsim, marks)
             send_marks_to_sim(relaxer, frel, marks)
-
-    
-
-
 
 main()
 exit()

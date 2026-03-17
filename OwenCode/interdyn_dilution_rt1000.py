@@ -190,11 +190,11 @@ def count_marks(marks):
 
 def main():
 
-    gpuid = sys.argv[1]
-    alpha10 = int(sys.argv[2])
-    ET = int(sys.argv[3])
-    dynspeed = int(sys.argv[4])
-    gens = int(sys.argv[5])
+    #gpuid = "cpu"
+    alpha10 = int(sys.argv[1])
+    ET = int(sys.argv[2])
+    dynspeed = int(sys.argv[3])
+    gens = int(sys.argv[4])
 
     size = 10000
     desired_density = 0.05
